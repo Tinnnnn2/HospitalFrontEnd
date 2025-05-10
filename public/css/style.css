@@ -1,0 +1,80 @@
+/* styles.css */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    
+}
+ .navbar-brand img {
+    width: 100px;
+    height: auto;
+    margin-left: 20px;
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #000000;
+    visibility: hidden;
+    transition: visibility 0.3s ease, transform 0.3s ease; /* เพิ่ม transition สำหรับการเคลื่อนไหว */
+    transform: scaleX(0); /* เริ่มต้นโดยการย่อขีดเส้นใต้ */
+    transform-origin: bottom left; /* ตั้งจุดแหล่งกำเนิดการเปลี่ยนแปลงของการเคลื่อนไหว */
+}
+
+.navbar-nav .nav-link:hover::after {
+    visibility: visible;
+    transform: scaleX(1); /* ขยายขีดเส้นใต้เมื่อชี้ */
+}
+
+.logo {
+    padding: 10px;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav .nav-link {
+    transition: color 0.3s ease;
+}
+
+
+
+.navbar-nav .username {
+    font-size: 1.1rem;
+}
+
+.navbar-nav .username:hover {
+    color: #0056b3;
+}
+
+.admin-links .nav-link {
+    font-weight: bold;
+    color: #dc3545; /* Red color for admin links */
+}
+
+.admin-links .nav-link:hover {
+    color: #c82333; /* Darker red on hover for admin links */
+}
+
+.username {
+    color: #000000; /* Blue color */
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+
+
+
+
