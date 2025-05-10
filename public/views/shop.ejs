@@ -47,7 +47,7 @@
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/"><img src="/img/logoHospital.jpeg" class="logo" alt="Logo"></a>
+            <a class="navbar-brand"><img src="/img/logoHospital.jpeg" class="logo" alt="Logo"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -76,20 +76,17 @@
 
 <div class="row mb-4 text-center justify-content-center">
     <% const iconList = [
-        { img: "/img/icons/ขยะ (1).jpg", name: "ขยะมูลฝอยทั่วไป", excelFile: "product_data.xlsx" },
-        { img: "/img/icons/ขยะ (3).jpg", name: "ขยะมูลฝอยติดเชื้อ", excelFile: "infected_waste.xlsx" },
-        { img: "/img/icons/ขยะ (4).jpg", name: "ขยะมูลฝอยอันตราย", excelFile: "dangerous_waste.xlsx" },
-        { img: "/img/icons/อ11.jpeg", name: "อ11", excelFile: "another_file.xlsx" },
-        { img: "/img/icons/น้ำเสีย.jpeg", name: "ระบบบ่อบำบัดน้ำเสีย", excelFile: "wastewater_system.xlsx" },
-        { img: "/img/icons/ประปา.jpeg", name: "ระบบประปา", excelFile: "water_system.xlsx" },
+        { img: "/img/icons/ขยะ (1).jpg", name: "ขยะมูลฝอยทั่วไป", sheetUrl: "https://docs.google.com/spreadsheets/d/1AMfmnVwdsDoFbfkZ3YOhtinlrwWh-BYlEdj8AsHZ-kg/edit?usp=sharing" },
+        { img: "/img/icons/ขยะ (3).jpg", name: "ขยะมูลฝอยติดเชื้อ", sheetUrl: "https://docs.google.com/spreadsheets/d/1oxO2pcv7W9PQu_daTsUCVpCjFA-6nHqPvL6n2t6j3ms/edit?usp=sharing" },
+        { img: "/img/icons/ขยะ (4).jpg", name: "ขยะมูลฝอยอันตราย", sheetUrl: "https://docs.google.com/spreadsheets/d/1e72ZkKTZooQ-efcxMBF1RDTtxZqaCFT8yPen5lJB0to/edit?usp=sharing" },
+        { img: "/img/icons/อ11.jpeg", name: "อ11", sheetUrl: "https://docs.google.com/spreadsheets/d/3BcDEFGHIJKLmno1234567890/edit?usp=sharing" },
+        { img: "/img/icons/น้ำเสีย.jpeg", name: "ระบบบ่อบำบัดน้ำเสีย", sheetUrl: "https://docs.google.com/spreadsheets/d/4CdEFghijkLMNO1234567890/edit?usp=sharing" },
+        { img: "/img/icons/ประปา.jpeg", name: "ระบบประปา", sheetUrl: "https://docs.google.com/spreadsheets/d/1zImJFQGn_3R8HrHvxCwi4pS0jHK7_Yuh8NKn8rrcKew/edit?gid=858183085#gid=858183085" }
     ]; %>
 
-    <% iconList.forEach(function(icon) { 
-        const fullExcelUrl = `${domain}/excel/${icon.excelFile}`;
-        const googleViewerUrl = `https://docs.google.com/gview?url=${fullExcelUrl}&embedded=true`;
-    %>
+    <% iconList.forEach(function(icon) { %>
         <div class="col-6 col-md-4 col-lg-2 mb-4 icon-box">
-            <a href="<%= googleViewerUrl %>" class="d-block text-decoration-none" target="_blank">
+            <a href="<%= icon.sheetUrl %>" class="d-block text-decoration-none" target="_blank">
                 <img src="<%= icon.img %>" alt="<%= icon.name %>" class="img-fluid">
                 <div class="icon-label"><%= icon.name %></div>
             </a>

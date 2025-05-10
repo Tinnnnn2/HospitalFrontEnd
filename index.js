@@ -7,7 +7,7 @@ const multer  = require('multer');
 const { render } = require('ejs');
 const session = require('express-session')
 
-const base_url = "http://localhost:3000"; //ตำแหน่งBack End
+const base_url = "https://hospitalbackend-j8ny.onrender.com"; //ตำแหน่งBack End
 
 app.set("views",path.join(__dirname,"/public/views"));
 app.set('view engine','ejs');
@@ -50,6 +50,10 @@ const onlyUser = (req,res,next) => {
         res.redirect("/shop");
     }
 }
+app.get("/",(req, res) => {
+    
+    res.redirect("/login");
+});
 
 //--------------------------------------------------------------
 
@@ -77,7 +81,13 @@ app.get("/shop",async(req, res) => {
 //-------------------------------------------------------
 
 app.get("/login",async(req, res) => {
-    
+     if (!req.session.logindata) {
+        req.session.logindata = { 
+            username: "",
+            level: "user"  // เพิ่ม default value
+        };
+    }
+
     const response = await axios.get(base_url + '/users');
     res.render("login", {users : response.data});
 });
@@ -114,12 +124,12 @@ app.post("/login",async(req, res) => {
 app.get("/logout",(req, res) =>{
     try{
         req.session.logindata = null
-        res.redirect("/shop")
+        res.redirect("/login")
     }
     catch(err){
         console.log(err);
         res.status(500).send("error");
-        res.redirect("/shop")
+        res.redirect("/login")
     }
 });
 
