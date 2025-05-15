@@ -92,35 +92,35 @@ app.get("/login",async(req, res) => {
     res.render("login", {users : response.data});
 });
 
-app.post("/login",async(req, res) => {
-    try{
-    const data = {
-        name:req.body.username,
-        password:req.body.password
-    }
-    const response = await axios.post(base_url + '/login',data)
-    if(response.data.message == "user not found"){
-        console.log("user wrong");
-        res.redirect("/login")
-    }
-    else if(response.data.message == "wrong password"){
-        console.log("password wrong");
-        res.redirect("/login")
-    }
-    else{
-        req.session.logindata = {
-            username: response.data.checkN.username,
-            level: response.data.checkN.level,
-            userid:response.data.checkN.userid
+app.post("/login", async (req, res) => {
+    try {
+        const data = {
+            name: req.body.username,
+            password: req.body.password
+        };
+        const response = await axios.post(base_url + '/login', data);
+
+        if (response.data.message == "user not found") {
+            console.log("user wrong");
+            res.render("login", { error: "ชื่อผู้ใช้ไม่ถูกต้อง" }); // ส่ง error ไป
+        } else if (response.data.message == "wrong password") {
+            console.log("password wrong");
+            res.render("login", { error: "รหัสผ่านไม่ถูกต้อง" }); // ส่ง error ไป
+        } else {
+            req.session.logindata = {
+                username: response.data.checkN.username,
+                level: response.data.checkN.level,
+                userid: response.data.checkN.userid
+            };
+            console.log(req.session.logindata);
+            res.redirect("/shop");
         }
-        console.log(req.session.logindata)
-        res.redirect("/shop");
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("error");
     }
-}catch(err){
-    console.log(err);
-    res.status(500).send("error");
-}
 });
+
 app.get("/logout",(req, res) =>{
     try{
         req.session.logindata = null
