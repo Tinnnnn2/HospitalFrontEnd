@@ -24,6 +24,20 @@ app.use(
     })
   );
 
+  const fetchWithRetry = async (url, options = {}, retries = 5, delay = 4000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      console.warn(`Retry ${i + 1}/${retries}:`, err.message);
+      if (i < retries - 1) await new Promise(res => setTimeout(res, delay));
+    }
+  }
+  throw new Error('Backend is not responding.');
+};
+
 const putimg = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, './public/img/products'));
@@ -57,20 +71,24 @@ app.get("/",(req, res) => {
 
 //--------------------------------------------------------------
 
-app.get("/shop",async(req, res) => {
-    const response = await axios.get(base_url + "/Products");
-    const response2 = await axios.get(base_url + "/Types");
-    
-    console.log(req.session.logindata)
-    if(!req.session.logindata){
-        req.session.logindata = {
-        username: ""
-        }
+app.get("/shop", async (req, res) => {
+  try {
+    const product = await fetchWithRetry(base_url + "/Products");
+    const type = await fetchWithRetry(base_url + "/Types");
+
+    if (!req.session.logindata) {
+      req.session.logindata = { username: "" };
     }
+
     res.render("shop", {
-        product: response.data, 
-        type: response2.data,
-        usedata:req.session.logindata});
+      product,
+      type,
+      usedata: req.session.logindata
+    });
+  } catch (err) {
+    console.error("โหลดข้อมูลไม่สำเร็จ:", err.message);
+    res.status(500).send("Server ตอบสนองช้า กรุณารีเฟรชหรือลองใหม่อีกครั้ง");
+  }
 });
 
 
@@ -80,16 +98,18 @@ app.get("/shop",async(req, res) => {
 
 //-------------------------------------------------------
 
-app.get("/login",async(req, res) => {
-     if (!req.session.logindata) {
-        req.session.logindata = { 
-            username: "",
-            level: "user"  // เพิ่ม default value
-        };
+app.get("/login", async (req, res) => {
+  try {
+    if (!req.session.logindata) {
+      req.session.logindata = { username: "", level: "user" };
     }
 
-    const response = await axios.get(base_url + '/users');
-    res.render("login", {users : response.data});
+    const users = await fetchWithRetry(base_url + '/users');
+    res.render("login", { users });
+  } catch (err) {
+    console.error("โหลด users ไม่ได้:", err.message);
+    res.status(500).send("เซิร์ฟเวอร์ยังไม่พร้อมใช้งาน กรุณาลองใหม่อีกครั้ง");
+  }
 });
 
 app.post("/login", async (req, res) => {
